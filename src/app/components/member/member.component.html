@@ -1,0 +1,38 @@
+<div class="container">  
+    <div class="row">  
+      <div class="col-sm-12">  
+        <h1><span class="badge badge-success">Teammember's Information</span></h1>
+      </div>  
+    </div>  
+    <div class="col-sm-12 space">  
+      <div class="row">  
+        <div class="col-sm-6">  
+          <button type="button" class="btn btn-primary" data-toggle="modal" routerLink="/addmember">  
+            Add New Member  
+          </button>  
+        </div> 
+      </div>  
+    </div>  
+  </div>  
+  <div class="container space">  
+    <table class="table table-striped">  
+      <thead class="thead-dark">
+        <th>Name</th>  
+        <th>Department</th>  
+        <th>City</th>
+        <th>Action</th>  
+      </thead>  
+      <tbody>  
+        <tr *ngFor="let m of member | async;">
+          <td>{{m.Name}}</td>  
+          <td>{{m.Department}}</td>  
+          <td>{{m.City}}</td>  
+          <td>  
+            <div class="btn-group">  
+              <button type="button" class="btn btn-primary mr-1" (click)="memberEdit(m.Id)">Edit</button>  
+            </div>  
+          </td>  
+        </tr>  
+      </tbody>
+    </table>
+  </div>  
