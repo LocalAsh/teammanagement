@@ -6,21 +6,23 @@ import { Member } from 'src/app/classes/member';
   providedIn: 'root'
 })
 export class MemberService {
-   Url = 'https://localhost:44319/api/members';
+   url: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.url = 'https://localhost:44319/api/members/';
+   }
    createMember(member: Member) {
      const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-     return this.http.post<Member[]>(this.Url, member, httpOptions);
+     return this.http.post<Member[]>(this.url, member, httpOptions);
    }
    getMember(): Observable<Member[]> {
-    return this.http.get<Member[]>(this.Url);
+    return this.http.get<Member[]>(this.url);
    }
    getMemberById(id: string) {
-    return this.http.get<Member>(this.Url + '/?id=' + id);
+    return this.http.get<Member>(this.url + id);
    }
-   UpdateMember(id: string, member: Member) {
+   updateMember(id: string, member: Member) {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.http.put<Member[]>(this.Url + '/?id=' + id, member, httpOptions);
+    return this.http.put<Member[]>(this.url + id, member, httpOptions);
    }
 }

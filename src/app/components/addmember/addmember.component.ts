@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MemberService } from 'src/app/services/member.service';
 import { Member } from 'src/app/classes/member';
@@ -11,38 +10,37 @@ import { Router } from '@angular/router';
   styleUrls: ['./addmember.component.scss']
 })
 export class AddmemberComponent implements OnInit {
-  massage: string;
-  dataSaved = false;
+  buttonText: string;
+  Id: string;
   addMember: FormGroup;
-  MemberIdUpdate = '0';
   constructor(private router: Router, private memberService: MemberService) { }
 
   createMember(member: Member) {
-    if (this.MemberIdUpdate !== '0') {
-      member.Id = this.MemberIdUpdate;
       this.memberService.createMember(member).subscribe(
         () => {
-          if (this.MemberIdUpdate === '0') {
-            this.massage = 'Saved Successfully';
-          } else {
-            this.massage = 'Update Successfully';
-          }
-          this.dataSaved = true;
           this.router.navigate(['/member']);
         });
-      }
+  }
+
+  updateMember(id: string, member: Member) {
+    member.Id = id;
+    this.memberService.updateMember(id, member).subscribe(
+      () => {
+        this.router.navigate(['/member']);
+      });
   }
 
   onFormSubmit() {
     const member = this.addMember.value;
-    this.createMember(member);
+    if (this.Id !== null) {
+    this.updateMember(this.Id, member);
+    } else {
+      this.createMember(member);
+    }
   }
 
   memberEdit(id: string) {
     this.memberService.getMemberById(id).subscribe(member => {
-      this.massage = null;
-      this.dataSaved = false;
-      this.MemberIdUpdate = id;
       this.addMember.controls.Name.setValue(member.Name);
       this.addMember.controls.Department.setValue(member.Department);
       this.addMember.controls.City.setValue(member.City);
@@ -60,8 +58,11 @@ export class AddmemberComponent implements OnInit {
       City: new FormControl(),
   });
 
-    const Id = localStorage.getItem('id');
-    if (Id !== null) {
-    this.memberEdit(Id);
+    this.Id = localStorage.getItem('id');
+    if (this.Id !== null) {
+    this.memberEdit(this.Id);
+    this.buttonText = 'Update Member';
+  }else {
+    this.buttonText = 'Add Member';
   }}
 }
